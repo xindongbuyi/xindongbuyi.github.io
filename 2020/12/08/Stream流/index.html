@@ -1,0 +1,365 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Stream流 | 铠甲合体</title><meta name="keywords" content="JDK"><meta name="author" content="依"><meta name="copyright" content="依"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><meta name="description" content="前言:Stream流">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Stream流">
+<meta property="og:url" content="https://xindongbuyi.github.io/2020/12/08/Stream%E6%B5%81/index.html">
+<meta property="og:site_name" content="铠甲合体">
+<meta property="og:description" content="前言:Stream流">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s3.ax1x.com/2020/12/10/riduNt.jpg">
+<meta property="article:published_time" content="2020-12-08T05:14:00.000Z">
+<meta property="article:modified_time" content="2020-12-10T06:27:51.558Z">
+<meta property="article:author" content="依">
+<meta property="article:tag" content="JDK">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s3.ax1x.com/2020/12/10/riduNt.jpg"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://xindongbuyi.github.io/2020/12/08/Stream%E6%B5%81/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><meta name="baidu-site-verification" content="3ffac3b851796daf16826675772abbca"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?3ffac3b851796daf16826675772abbca";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Titillium+Web&amp;display=swap"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"簡"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  date_suffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  ClickShowText: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: {"chs_to_cht":"你已切换为繁体","cht_to_chs":"你已切换为简体","day_to_night":"你已切换为深色模式","night_to_day":"你已切换为浅色模式","bgLight":"#49b1f5","bgDark":"#2d3035","position":"bottom-left"},
+  source: {
+    jQuery: 'https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js',
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/js/jquery.justifiedGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/justifiedGallery/dist/css/justifiedGallery.min.css'
+    },
+    fancybox: {
+      js: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isanchor: true
+};
+
+var saveToLocal = {
+  set: function setWithExpiry(key, value, ttl) {
+    const now = new Date()
+    const expiryDay = ttl * 86400000
+    const item = {
+      value: value,
+      expiry: now.getTime() + expiryDay,
+    }
+    localStorage.setItem(key, JSON.stringify(item))
+  },
+
+  get: function getWithExpiry(key) {
+    const itemStr = localStorage.getItem(key)
+
+    if (!itemStr) {
+      return undefined
+    }
+    const item = JSON.parse(itemStr)
+    const now = new Date()
+
+    if (now.getTime() > item.expiry) {
+      localStorage.removeItem(key)
+      return undefined
+    }
+    return item.value
+  }
+}
+
+// https://stackoverflow.com/questions/16839698/jquery-getscript-alternative-in-native-javascript
+const getScript = url => new Promise((resolve, reject) => {
+  const script = document.createElement('script')
+  script.src = url
+  script.async = true
+  script.onerror = reject
+  script.onload = script.onreadystatechange = function() {
+    const loadState = this.readyState
+    if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+    script.onload = script.onreadystatechange = null
+    resolve()
+  }
+  document.head.appendChild(script)
+})</script><script id="config_change">var GLOBAL_CONFIG_SITE = { 
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2020-12-10 14:27:51'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(function () {  window.activateDarkMode = function () {
+    document.documentElement.setAttribute('data-theme', 'dark')
+    if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+    }
+  }
+  window.activateLightMode = function () {
+    document.documentElement.setAttribute('data-theme', 'light')
+   if (document.querySelector('meta[name="theme-color"]') !== null) {
+      document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+    }
+  }
+  const autoChangeMode = 'true'
+  const t = saveToLocal.get('theme')
+  if (autoChangeMode === '1') {
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches
+    const isLightMode = window.matchMedia('(prefers-color-scheme: light)').matches
+    const isNotSpecified = window.matchMedia('(prefers-color-scheme: no-preference)').matches
+    const hasNoSupport = !isDarkMode && !isLightMode && !isNotSpecified
+    if (t === undefined) {
+      if (isLightMode) activateLightMode()
+      else if (isDarkMode) activateDarkMode()
+      else if (isNotSpecified || hasNoSupport) {
+        const now = new Date()
+        const hour = now.getHours()
+        const isNight = hour <= 6 || hour >= 18
+        isNight ? activateDarkMode() : activateLightMode()
+      }
+      window.matchMedia('(prefers-color-scheme: dark)').addListener(function (e) {
+        if (saveToLocal.get('theme') === undefined) {
+          e.matches ? activateDarkMode() : activateLightMode()
+        }
+      })
+    } else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else if (autoChangeMode === '2') {
+    const now = new Date()
+    const hour = now.getHours()
+    const isNight = hour <= 6 || hour >= 18
+    if (t === undefined) isNight ? activateDarkMode() : activateLightMode()
+    else if (t === 'light') activateLightMode()
+    else activateDarkMode()
+  } else {
+    if (t === 'dark') activateDarkMode()
+    else if (t === 'light') activateLightMode()
+  }const asideStatus = saveToLocal.get('aside-status')
+if (asideStatus !== undefined) {
+   if (asideStatus === 'hide') {
+     document.documentElement.classList.add('hide-aside')
+   } else {
+     document.documentElement.classList.remove('hide-aside')
+   }
+}})()</script><link rel="stylesheet" href="//at.alicdn.com/t/font_2233274_1grgq9452i4j.css"><style type="text/css">.app-refresh{position:fixed;top:-2.2rem;left:0;right:0;z-index:99999;padding:0 1rem;font-size:15px;height:2.2rem;transition:all .3s ease}.app-refresh-wrap{display:flex;color:#fff;height:100%;align-items:center;justify-content:center}.app-refresh-wrap a{color:#fff;text-decoration:underline;cursor:pointer}</style><link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/HCLonely/images@master/others/heartbeat.min.css"><meta name="generator" content="Hexo 5.2.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="author-avatar"><img class="avatar-img" src="/img/avatar.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data"><div class="data-item is-center"><div class="data-item-link"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a></div></div><div class="data-item is-center"><div class="data-item-link"><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/shuoshuo/"><i class="fa-fw iconfont icon-shuoshuo"></i><span> 说说</span></a></div><div class="menus_item"><a class="site-page" href="/photos/"><i class="fa-fw iconfont icon-iconfont19"></i><span> 相册</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div></div></div></div><div id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(https://s3.ax1x.com/2020/12/10/riduNt.jpg)"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">铠甲合体</a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fa fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/shuoshuo/"><i class="fa-fw iconfont icon-shuoshuo"></i><span> 说说</span></a></div><div class="menus_item"><a class="site-page" href="/photos/"><i class="fa-fw iconfont icon-iconfont19"></i><span> 相册</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fa fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Stream流</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2020-12-08T05:14:00.000Z" title="发表于 2020-12-08 13:14:00">2020-12-08</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2020-12-10T06:27:51.558Z" title="更新于 2020-12-10 14:27:51">2020-12-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2/">个人博客</a></span></div><div class="meta-secondline"> <span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">2.4k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>9分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><p>单从“Stream”这个单词上来看，它似乎和 java.io 包下的 InputStream 和 OutputStream 有些关系。实际上呢，没毛关系。Java 8 新增的 Stream 是为了解放程序员操作集合（Collection）时的生产力，之所以能解放，很大一部分原因可以归功于同时出现的 Lambda 表达式——极大的提高了编程效率和程序可读性。</p>
+<p>Stream 究竟是什么呢？</p>
+<blockquote>
+<p>Stream 就好像一个高级的迭代器，但只能遍历一次，就好像一江春水向东流；在流的过程中，对流中的元素执行一些操作，比如“过滤掉长度大于 10 的字符串”、“获取每个字符串的首字母”等。</p>
+</blockquote>
+<p>要想操作流，首先需要有一个数据源，可以是数组或者集合。每次操作都会返回一个新的流对象，方便进行链式操作，但原有的流对象会保持不变。</p>
+<p>流的操作可以分为两种类型：</p>
+<p>1）中间操作，可以有多个，每次返回一个新的流，可进行链式操作。</p>
+<p>2）终端操作，只能有一个，每次执行完，这个流也就用光光了，无法执行下一个操作，因此只能放在最后。</p>
+<p>来举个例子。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">list.add(<span class="string">&quot;武汉加油&quot;</span>);</span><br><span class="line">list.add(<span class="string">&quot;中国加油&quot;</span>);</span><br><span class="line">list.add(<span class="string">&quot;世界加油&quot;</span>);</span><br><span class="line">list.add(<span class="string">&quot;世界加油&quot;</span>);</span><br><span class="line"></span><br><span class="line"><span class="keyword">long</span> count = list.stream().distinct().count();</span><br><span class="line">System.out.println(count);</span><br><span class="line"><span class="number">12345678</span></span><br></pre></td></tr></table></figure>
+
+<p><code>distinct()</code> 方法是一个中间操作（去重），它会返回一个新的流（没有共同元素）。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">Stream&lt;T&gt; <span class="title">distinct</span><span class="params">()</span></span>;</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p><code>count()</code> 方法是一个终端操作，返回流中的元素个数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">long</span> <span class="title">count</span><span class="params">()</span></span>;</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>中间操作不会立即执行，只有等到终端操作的时候，流才开始真正地遍历，用于映射、过滤等。通俗点说，就是一次遍历执行多个操作，性能就大大提高了。</p>
+<p>理论部分就扯这么多，下面直接进入实战部分。</p>
+<h3 id="01、创建流"><a href="#01、创建流" class="headerlink" title="01、创建流"></a>01、创建流</h3><p>如果是数组的话，可以使用 <code>Arrays.stream()</code> 或者 <code>Stream.of()</code> 创建流；如果是集合的话，可以直接使用 <code>stream()</code> 方法创建流，因为该方法已经添加到 Collection 接口中。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CreateStreamDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String[] arr = <span class="keyword">new</span> String[]&#123;<span class="string">&quot;武汉加油&quot;</span>, <span class="string">&quot;中国加油&quot;</span>, <span class="string">&quot;世界加油&quot;</span>&#125;;</span><br><span class="line">        Stream&lt;String&gt; stream = Arrays.stream(arr);</span><br><span class="line"></span><br><span class="line">        stream = Stream.of(<span class="string">&quot;武汉加油&quot;</span>, <span class="string">&quot;中国加油&quot;</span>, <span class="string">&quot;世界加油&quot;</span>);</span><br><span class="line"></span><br><span class="line">        List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        list.add(<span class="string">&quot;武汉加油&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;中国加油&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;世界加油&quot;</span>);</span><br><span class="line">        stream = list.stream();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">1234567891011121314</span></span><br></pre></td></tr></table></figure>
+
+<p>查看 Stream 源码的话，你会发现 <code>of()</code> 方法内部其实调用了 <code>Arrays.stream()</code> 方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span>&lt;T&gt; Stream&lt;T&gt; <span class="title">of</span><span class="params">(T... values)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> Arrays.stream(values);</span><br><span class="line">&#125;</span><br><span class="line"><span class="number">123</span></span><br></pre></td></tr></table></figure>
+
+<p>另外，集合还可以调用 <code>parallelStream()</code> 方法创建并发流，默认使用的是 <code>ForkJoinPool.commonPool()</code>线程池。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Long&gt; aList = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">Stream&lt;Long&gt; parallelStream = aList.parallelStream();</span><br><span class="line"><span class="number">12</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="02、操作流"><a href="#02、操作流" class="headerlink" title="02、操作流"></a>02、操作流</h3><p>Stream 类提供了很多有用的操作流的方法，我来挑一些常用的给你介绍一下。</p>
+<p>1）过滤</p>
+<p>通过 <code>filter()</code> 方法可以从流中筛选出我们想要的元素。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FilterStreamDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        list.add(<span class="string">&quot;周杰伦&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;王力宏&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;陶喆&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;林俊杰&quot;</span>);</span><br><span class="line">        Stream&lt;String&gt; stream = list.stream().filter(element -&gt; element.contains(<span class="string">&quot;王&quot;</span>));</span><br><span class="line">        stream.forEach(System.out::println);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>filter()</code> 方法接收的是一个 Predicate（Java 8 新增的一个函数式接口，接受一个输入参数返回一个布尔值结果）类型的参数，因此，我们可以直接将一个 Lambda 表达式传递给该方法，比如说 <code>element -&gt; element.contains(&quot;王&quot;)</code> 就是筛选出带有“王”的字符串。</p>
+<p><code>forEach()</code> 方法接收的是一个 Consumer（Java 8 新增的一个函数式接口，接受一个输入参数并且无返回的操作）类型的参数，<code>类名 :: 方法名</code>是 Java 8 引入的新语法，<code>System.out</code> 返回 PrintStream 类，println 方法你应该知道是打印的。</p>
+<p><code>stream.forEach(System.out::println);</code> 相当于在 for 循环中打印，类似于下面的代码：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (String s : strs) &#123;</span><br><span class="line">    System.out.println(s);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>很明显，一行代码看起来更简洁一些。来看一下程序的输出结果：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">王力宏</span><br></pre></td></tr></table></figure>
+
+<p>2）映射</p>
+<p>如果想通过某种操作把一个流中的元素转化成新的流中的元素，可以使用 <code>map()</code> 方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MapStreamDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        list.add(<span class="string">&quot;周杰伦&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;王力宏&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;陶喆&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;林俊杰&quot;</span>);</span><br><span class="line">        Stream&lt;Integer&gt; stream = list.stream().map(String::length);</span><br><span class="line">        stream.forEach(System.out::println);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>map()</code> 方法接收的是一个 Function（Java 8 新增的一个函数式接口，接受一个输入参数 T，返回一个结果 R）类型的参数，此时参数 为 String 类的 length 方法，也就是把 <code>Stream&lt;String&gt;</code> 的流转成一个 <code>Stream&lt;Integer&gt;</code> 的流。</p>
+<p>程序输出的结果如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">3</span><br><span class="line">3</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td></tr></table></figure>
+
+<p>3）匹配</p>
+<p>Stream 类提供了三个方法可供进行元素匹配，它们分别是：</p>
+<ul>
+<li><code>anyMatch()</code>，只要有一个元素匹配传入的条件，就返回 true。</li>
+<li><code>allMatch()</code>，只有有一个元素不匹配传入的条件，就返回 false；如果全部匹配，则返回 true。</li>
+<li><code>noneMatch()</code>，只要有一个元素匹配传入的条件，就返回 false；如果全部匹配，则返回 true。</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MatchStreamDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        list.add(<span class="string">&quot;周杰伦&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;王力宏&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;陶喆&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;林俊杰&quot;</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">boolean</span>  anyMatchFlag = list.stream().anyMatch(element -&gt; element.contains(<span class="string">&quot;王&quot;</span>));</span><br><span class="line">        <span class="keyword">boolean</span>  allMatchFlag = list.stream().allMatch(element -&gt; element.length() &gt; <span class="number">1</span>);</span><br><span class="line">        <span class="keyword">boolean</span>  noneMatchFlag = list.stream().noneMatch(element -&gt; element.endsWith(<span class="string">&quot;沉&quot;</span>));</span><br><span class="line">        System.out.println(anyMatchFlag);</span><br><span class="line">        System.out.println(allMatchFlag);</span><br><span class="line">        System.out.println(noneMatchFlag);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>因为“王力宏”以“王”字开头，所以 anyMatchFlag 应该为 true；因为“周杰伦”、“王力宏”、“陶喆”、“林俊杰”的字符串长度都大于 1，所以 allMatchFlag 为 true；因为 4 个字符串结尾都不是“沉”，所以 noneMatchFlag 为 true。</p>
+<p>程序输出的结果如下所示：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">true</span><br><span class="line">true</span><br><span class="line">true</span><br></pre></td></tr></table></figure>
+
+<p>4）组合</p>
+<p><code>reduce()</code> 方法的主要作用是把 Stream 中的元素组合起来，它有两种用法：</p>
+<ul>
+<li><code>Optional&lt;T&gt; reduce(BinaryOperator&lt;T&gt; accumulator)</code></li>
+</ul>
+<p>没有起始值，只有一个参数，就是运算规则，此时返回 <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/PqK0KNVHyoEtZDtp5odocA">Optional</a>。</p>
+<ul>
+<li><code>T reduce(T identity, BinaryOperator&lt;T&gt; accumulator)</code></li>
+</ul>
+<p>有起始值，有运算规则，两个参数，此时返回的类型和起始值类型一致。</p>
+<p>来看下面这个例子。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ReduceStreamDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        Integer[] ints = &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;;</span><br><span class="line">        List&lt;Integer&gt; list = Arrays.asList(ints);</span><br><span class="line"></span><br><span class="line">        Optional&lt;Integer&gt; optional = list.stream().reduce((a, b) -&gt; a + b);</span><br><span class="line">        Optional&lt;Integer&gt; optional1 = list.stream().reduce(Integer::sum);</span><br><span class="line">        System.out.println(optional.orElse(<span class="number">0</span>));</span><br><span class="line">        System.out.println(optional1.orElse(<span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> reduce = list.stream().reduce(<span class="number">6</span>, (a, b) -&gt; a + b);</span><br><span class="line">        System.out.println(reduce);</span><br><span class="line">        <span class="keyword">int</span> reduce1 = list.stream().reduce(<span class="number">6</span>, Integer::sum);</span><br><span class="line">        System.out.println(reduce1);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>运算规则可以是 <a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/ozr0jYHIc12WSTmmd_vEjw">Lambda 表达式</a>（比如 <code>(a, b) -&gt; a + b</code>），也可以是类名::方法名（比如 <code>Integer::sum</code>）。</p>
+<p>程序运行的结果如下所示：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">6</span></span><br><span class="line"><span class="number">6</span></span><br><span class="line"><span class="number">12</span></span><br><span class="line"><span class="number">12</span></span><br><span class="line"><span class="number">1234</span></span><br></pre></td></tr></table></figure>
+
+<p>0、1、2、3 在没有起始值相加的时候结果为 6；有起始值 6 的时候结果为 12。</p>
+<h3 id="03、转换流"><a href="#03、转换流" class="headerlink" title="03、转换流"></a>03、转换流</h3><p>既然可以把集合或者数组转成流，那么也应该有对应的方法，将流转换回去——<code>collect()</code> 方法就满足了这种需求。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">CollectStreamDemo</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        List&lt;String&gt; list = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        list.add(<span class="string">&quot;周杰伦&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;王力宏&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;陶喆&quot;</span>);</span><br><span class="line">        list.add(<span class="string">&quot;林俊杰&quot;</span>);</span><br><span class="line"></span><br><span class="line">        String[] strArray = list.stream().toArray(String[]::<span class="keyword">new</span>);</span><br><span class="line">        System.out.println(Arrays.toString(strArray));</span><br><span class="line"></span><br><span class="line">        List&lt;Integer&gt; list1 = list.stream().map(String::length).collect(Collectors.toList());</span><br><span class="line">        List&lt;String&gt; list2 = list.stream().collect(Collectors.toCollection(ArrayList::<span class="keyword">new</span>));</span><br><span class="line">        System.out.println(list1);</span><br><span class="line">        System.out.println(list2);</span><br><span class="line"></span><br><span class="line">        String str = list.stream().collect(Collectors.joining(<span class="string">&quot;, &quot;</span>)).toString();</span><br><span class="line">        System.out.println(str);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><code>toArray()</code> 方法可以将流转换成数组，你可能比较好奇的是 <code>String[]::new</code>，它是什么东东呢？来看一下 <code>toArray()</code> 方法的源码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;A&gt; A[] toArray(IntFunction&lt;A[]&gt; generator);</span><br><span class="line"><span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p>也就是说 <code>String[]::new</code> 是一个 IntFunction，一个可以产生所需的新数组的函数，可以通过反编译字节码看看它到底是什么：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String[] strArray = (String[])list.stream().toArray((x$<span class="number">0</span>) -&gt; &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> String[x$<span class="number">0</span>];</span><br><span class="line">&#125;);</span><br><span class="line">System.out.println(Arrays.toString(strArray));</span><br></pre></td></tr></table></figure>
+
+<p>也就是相当于返回了一个指定长度的字符串数组。</p>
+<p>当我们需要把一个集合按照某种规则转成另外一个集合的时候，就可以配套使用 <code>map()</code> 方法和 <code>collect()</code> 方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Integer&gt; list1 = list.stream().map(String::length).collect(Collectors.toList());</span><br></pre></td></tr></table></figure>
+
+<p>通过 <code>stream()</code> 方法创建集合的流后，再通过 <code>map(String:length)</code> 将其映射为字符串长度的一个新流，最后通过 <code>collect()</code> 方法将其转换成新的集合。</p>
+<p>Collectors 是一个收集器的工具类，内置了一系列收集器实现，比如说 <code>toList()</code> 方法将元素收集到一个新的 <code>java.util.List</code> 中；比如说 <code>toCollection()</code> 方法将元素收集到一个新的 <code>java.util.ArrayList</code> 中；比如说 <code>joining()</code> 方法将元素收集到一个可以用分隔符指定的字符串中。</p>
+<p>来看一下程序的输出结果：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[周杰伦, 王力宏, 陶喆, 林俊杰]</span><br><span class="line">[<span class="number">3</span>, <span class="number">3</span>, <span class="number">2</span>, <span class="number">3</span>]</span><br><span class="line">[周杰伦, 王力宏, 陶喆, 林俊杰]</span><br><span class="line">周杰伦, 王力宏, 陶喆, 林俊杰</span><br></pre></td></tr></table></figure>
+
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">依</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="https://xindongbuyi.github.io/2020/12/08/Stream%E6%B5%81/">https://xindongbuyi.github.io/2020/12/08/Stream%E6%B5%81/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="https://xindongbuyi.github.io" target="_blank">铠甲合体</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/JDK/">JDK</a></div><div class="post_share"><div class="social-share" data-image="https://s3.ax1x.com/2020/12/10/riduNt.jpg" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2020/12/08/Redis/"><img class="prev-cover" src="https://s3.ax1x.com/2020/12/10/riaz7R.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">抽象方法、抽象类、接口、接口和抽象类的区别</div></div></a></div><div class="next-post pull-right"><a href="/2020/11/26/GitHub/"><img class="next-cover" src="https://s3.ax1x.com/2020/12/10/riad6e.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">都在用加速Github了你还在用原生的吗?</div></div></a></div></nav></div><div class="aside_content" id="aside_content"><div class="card-widget card-info"><div class="card-content"><div class="card-info-avatar is-center"><img class="avatar-img" src="/img/avatar.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/><div class="author-info__name">依</div><div class="author-info__description">这里是一个正在成长的小码农</div></div><div class="card-info-data"><div class="card-info-data-item is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">4</div></a></div><div class="card-info-data-item is-center"><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a></div><div class="card-info-data-item is-center"><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div></div><a class="button--animated" id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xindongbuyi"><i class="fab fa-github"></i><span>Github</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/xindongbuyi" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:2393724835@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div></div><div class="card-widget card-announcement"><div class="card-content"><div class="item-headline"><i class="fas fa-bullhorn card-announcement-animation"></i><span>公告</span></div><div class="announcement_content">欢迎来到在下的小屋</div></div></div><div class="card-widget card-pixiv"><div class="card-content"><div class="item-headline"><i class="fa fa-image" aria-hidden="true"></i><span>Pixiv色图榜Top50</span></div><iframe src="https://cloud.mokeyjay.com/pixiv" frameborder="0" style="width:99%;height:380px;margin:0;"></iframe></div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="card-content"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#01%E3%80%81%E5%88%9B%E5%BB%BA%E6%B5%81"><span class="toc-number">1.</span> <span class="toc-text">01、创建流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#02%E3%80%81%E6%93%8D%E4%BD%9C%E6%B5%81"><span class="toc-number">2.</span> <span class="toc-text">02、操作流</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#03%E3%80%81%E8%BD%AC%E6%8D%A2%E6%B5%81"><span class="toc-number">3.</span> <span class="toc-text">03、转换流</span></a></li></ol></div></div></div><div class="card-widget card-recent-post"><div class="card-content"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/2020/12/08/Redis/" title="抽象方法、抽象类、接口、接口和抽象类的区别"><img src="https://s3.ax1x.com/2020/12/10/riaz7R.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="抽象方法、抽象类、接口、接口和抽象类的区别"/></a><div class="content"><a class="title" href="/2020/12/08/Redis/" title="抽象方法、抽象类、接口、接口和抽象类的区别">抽象方法、抽象类、接口、接口和抽象类的区别</a><time datetime="2020-12-08T05:14:00.000Z" title="发表于 2020-12-08 13:14:00">2020-12-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/12/08/Stream%E6%B5%81/" title="Stream流"><img src="https://s3.ax1x.com/2020/12/10/riduNt.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="Stream流"/></a><div class="content"><a class="title" href="/2020/12/08/Stream%E6%B5%81/" title="Stream流">Stream流</a><time datetime="2020-12-08T05:14:00.000Z" title="发表于 2020-12-08 13:14:00">2020-12-08</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/11/26/GitHub/" title="都在用加速Github了你还在用原生的吗?"><img src="https://s3.ax1x.com/2020/12/10/riad6e.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="都在用加速Github了你还在用原生的吗?"/></a><div class="content"><a class="title" href="/2020/11/26/GitHub/" title="都在用加速Github了你还在用原生的吗?">都在用加速Github了你还在用原生的吗?</a><time datetime="2020-11-26T05:14:00.000Z" title="发表于 2020-11-26 13:14:00">2020-11-26</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/2020/11/26/BigDecimal/" title="BigDecimal"><img src="https://s3.ax1x.com/2020/12/10/rizw0f.jpg" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="BigDecimal"/></a><div class="content"><a class="title" href="/2020/11/26/BigDecimal/" title="BigDecimal">BigDecimal</a><time datetime="2020-11-26T05:14:00.000Z" title="发表于 2020-11-26 13:14:00">2020-11-26</time></div></div></div></div></div></div></div></main><footer id="footer" style="background: #FFFFFF"><div id="footer-wrap"><div class="copyright">&copy;2020  <i id="heartbeat" class="fa fas fa-heartbeat"></i> 依</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hi, welcome to my blog! !</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="简繁转换">簡</button><button id="darkmode" type="button" title="浅色和深色模式转换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="设置"><i class="fas fa-cog"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/medium-zoom/dist/medium-zoom.min.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.spacingElementById('content-inner')
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.spacingElementById('content-inner')
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-pjax"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><div class="app-refresh" id="app-refresh"> <div class="app-refresh-wrap"> <label>✨ 网站已更新最新版本 👉</label> <a href="javascript:void(0)" onclick="location.reload()">点击刷新</a> </div></div><script>function showNotification(){if(GLOBAL_CONFIG.Snackbar){var t="light"===document.documentElement.getAttribute("data-theme")?GLOBAL_CONFIG.Snackbar.bgLight:GLOBAL_CONFIG.Snackbar.bgDark,e=GLOBAL_CONFIG.Snackbar.position;Snackbar.show({text:"已更新最新版本",backgroundColor:t,duration:5e5,pos:e,actionText:"点击刷新",actionTextColor:"#fff",onActionClick:function(t){location.reload()}})}else{var o=`top: 0; background: ${"light"===document.documentElement.getAttribute("data-theme")?"#49b1f5":"#1f1f1f"};`;document.getElementById("app-refresh").style.cssText=o}}"serviceWorker"in navigator&&(navigator.serviceWorker.controller&&navigator.serviceWorker.addEventListener("controllerchange",function(){showNotification()}),window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js")}));</script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = [
+  'title',
+  '#config_change',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '.js-pjax'
+]
+
+if (false) {
+  pjaxSelectors.unshift('meta[property="og:image"]', 'meta[property="og:title"]', 'meta[property="og:url"]')
+}
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"]):not([href="/music/"]):not([href="/no-pjax/"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof chatBtnFn === 'function' && chatBtnFn()
+  typeof panguInit === 'function' && panguInit()
+
+  if (typeof gtag === 'function') {
+    gtag('config', '', {'page_path': window.location.pathname});
+  }
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // Analytics
+  if (false) {
+    MtaH5.pgv()
+  }
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+
+  typeof preloader === 'object' && preloader.endLoading()
+})
+
+
+document.addEventListener('pjax:send', function () {
+  typeof preloader === 'object' && preloader.initLoading()
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+})</script></div></body></html>
